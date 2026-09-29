@@ -61,6 +61,22 @@ Only one copy of Pendu runs at a time. Launching it again brings the existing bo
 
 Notes are saved in `~/.pendu/notes.json`. Set the `PENDU_HOME` environment variable, or pass `--data FILE`, to keep them somewhere else.
 
+## Web version
+
+The `web/` folder has the same board as a web page, built with plain HTML, CSS and JavaScript, so nothing needs to be installed or built. Open `web/index.html` in a browser, or serve the folder:
+
+```bash
+cd web
+python -m http.server 8000   # then open http://localhost:8000
+```
+
+It has the same notes, colours, every-day tasks and carry-over rules, and the same animations: notes fly up from the input bar and get pinned, finished notes get crossed out, and notes slide over when they change places. A few things work a little differently in the browser:
+
+- Notes are saved in the browser (`localStorage`). Use **⋯ → Export notes** and **Import notes** to move them to or from the desktop app's `notes.json`.
+- Removing a note doesn't ask first. Instead, an **Undo** button shows up for a few seconds.
+- On a touch screen, long-press a note to open its menu.
+- A browser tab can't open at login. When you come back to the tab on a new day, or after a while away, the notes settle onto the board again.
+
 ## Development
 
 ```bash
@@ -72,3 +88,5 @@ Code layout:
 - `pendu/store.py`: tasks, the day rules (carry-over and every-day tasks), and the JSON file
 - `pendu/app.py`: the Tkinter cork board, wake-from-sleep detection, and single-instance handling
 - `pendu/autostart.py`: registering Pendu to open at login on Windows, macOS and Linux
+- `web/store.js`: the same task rules as `pendu/store.py`, saved in the browser
+- `web/app.js`, `web/style.css`, `web/index.html`: the web cork board and its animations
