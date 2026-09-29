@@ -676,6 +676,7 @@
       { label: "Export notes (notes.json)", action: exportNotes },
       { label: "Import notes…", action: () => $("import-file").click() },
       "-",
+      { label: "About Pendu", action: () => { window.location.href = "index.html"; } },
       { label: "Get the desktop app", action: () =>
           window.open("https://github.com/jaisudhakar/pendu-reminder", "_blank", "noopener") },
     ], r.right - 220, r.bottom + 6);

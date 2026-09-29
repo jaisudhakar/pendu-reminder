@@ -63,7 +63,7 @@ Notes are saved in `~/.pendu/notes.json`. Set the `PENDU_HOME` environment varia
 
 ## Web version
 
-The `web/` folder has the same board as a web page, built with plain HTML, CSS and JavaScript, so nothing needs to be installed or built. Open `web/index.html` in a browser, or serve the folder:
+The `web/` folder is the Pendu website, built with plain HTML, CSS and JavaScript, so nothing needs to be installed or built. `index.html` is the landing page (how Pendu works, and who made it) and `board.html` is the board itself. Open `web/index.html` in a browser, or serve the folder:
 
 ```bash
 cd web
@@ -89,4 +89,6 @@ Code layout:
 - `pendu/app.py`: the Tkinter cork board, wake-from-sleep detection, and single-instance handling
 - `pendu/autostart.py`: registering Pendu to open at login on Windows, macOS and Linux
 - `web/store.js`: the same task rules as `pendu/store.py`, saved in the browser
-- `web/app.js`, `web/style.css`, `web/index.html`: the web cork board and its animations
+- `web/app.js`, `web/style.css`, `web/board.html`: the web cork board and its animations
+- `web/index.html`, `web/landing.css`, `web/landing.js`: the landing page
+- `netlify.toml`: publishes the `web/` folder on Netlify

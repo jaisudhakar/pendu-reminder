@@ -3,59 +3,223 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Pendu — today's notes</title>
-  <meta name="description" content="Your tasks for today, pinned to a cork board as sticky notes.">
+  <title>Pendu — your day, pinned to a cork board</title>
+  <meta name="description" content="Pendu pins today's tasks to a cork board as sticky notes. It opens when you open your laptop, carries unfinished work to tomorrow, and starts a fresh board every morning. Introduced by Sudhakar.">
+  <meta name="author" content="Sudhakar">
   <meta name="theme-color" content="#6d4c33">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Pendu — your day, pinned to a cork board">
+  <meta property="og:description" content="Today's tasks as sticky notes that pop up when you open your laptop. Introduced by Sudhakar.">
+  <meta property="og:image" content="assets/og.png">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="landing.css">
 </head>
 <body>
-  <header class="bar top">
-    <div class="brand">
-      <h1 class="logo">Pendu</h1>
-      <span class="date" id="date"></span>
-    </div>
-    <div class="actions">
-      <div class="progress">
-        <span id="progress-text">No tasks yet</span>
-        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
-      </div>
-      <button class="btn" id="clear" type="button">Clear finished</button>
-      <button class="btn icon" id="more" type="button" aria-label="More options" aria-haspopup="menu">⋯</button>
-    </div>
+  <header class="nav" id="nav">
+    <a class="nav-logo" href="#top">Pendu <span aria-hidden="true">📌</span></a>
+    <nav class="nav-links" aria-label="Sections">
+      <a href="#workflow">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#get">Get it</a>
+      <a href="#maker">About the maker</a>
+    </nav>
+    <a class="btn btn-primary nav-cta" href="board.html">Open the board</a>
   </header>
 
-  <main class="board-wrap" id="wrap">
-    <div class="board" id="board"></div>
+  <main id="top">
+    <!-- Hero ---------------------------------------------------------------->
+    <section class="hero cork">
+      <div class="hero-copy">
+        <a class="badge" href="#maker">
+          <img class="avatar" src="https://avatars.githubusercontent.com/u/25986394?v=4&s=64" alt="" width="22" height="22">
+          Introduced by <strong>Sudhakar</strong>
+        </a>
+        <h1>Your day,<br><span class="hand">pinned to a cork board.</span></h1>
+        <p class="lead">Pendu puts today's tasks on a cork board as sticky notes, and they pop up when you open your laptop. Tick them off as you go. Anything you don't finish is still there tomorrow.</p>
+        <div class="hero-actions">
+          <a class="btn btn-primary btn-lg" href="board.html">Open the board <span aria-hidden="true">→</span></a>
+          <a class="btn btn-ghost btn-lg" href="#workflow">See how it works</a>
+        </div>
+        <p class="hero-note">Free · No sign-up · Your notes stay on your device</p>
+      </div>
+
+      <div class="demo" aria-label="Animated preview of the Pendu board" role="img">
+        <div class="demo-top">
+          <span class="demo-logo">Pendu</span>
+          <span class="demo-progress"><span id="demo-count">No tasks yet</span><i><b id="demo-fill"></b></i></span>
+        </div>
+        <div class="demo-board" id="demo-board"></div>
+        <div class="demo-bottom">
+          <span class="demo-input" id="demo-input"><span id="demo-typed"></span><i class="caret"></i></span>
+          <span class="demo-stick" id="demo-stick">Stick it</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Workflow ------------------------------------------------------------>
+    <section class="section" id="workflow">
+      <div class="section-head reveal">
+        <p class="eyebrow">How it works</p>
+        <h2>One day with Pendu</h2>
+        <p>Pendu follows your day from the moment you open your laptop to midnight, when the board starts over.</p>
+      </div>
+
+      <ol class="timeline">
+        <li class="step reveal">
+          <div class="step-time">Morning</div>
+          <div class="step-card" data-color="yellow">
+            <i class="pin"></i>
+            <h3>1. Open your laptop</h3>
+            <p>The board shows up on its own. Pendu opens when you log in, and comes back to the front when you wake the laptop from sleep.</p>
+          </div>
+        </li>
+        <li class="step reveal">
+          <div class="step-time">Planning</div>
+          <div class="step-card" data-color="pink">
+            <i class="pin"></i>
+            <h3>2. Write today's tasks</h3>
+            <p>Type a task and press <kbd>Enter</kbd>. The note flies up onto the board and gets pinned. Pick a colour, or tick <em>Every day</em> for habits like "Drink water".</p>
+          </div>
+        </li>
+        <li class="step reveal">
+          <div class="step-time">All day</div>
+          <div class="step-card" data-color="green">
+            <i class="pin"></i>
+            <h3>3. Tick things off</h3>
+            <p>Click a note to check it. It gets crossed out and moves to the end, and the progress bar fills up. Double-click to edit, right-click for more options.</p>
+          </div>
+        </li>
+        <li class="step reveal">
+          <div class="step-time">Evening</div>
+          <div class="step-card" data-color="blue">
+            <i class="pin"></i>
+            <h3>4. Nothing gets forgotten</h3>
+            <p>A task you didn't finish stays on the board the next day, marked <em>from 09/28</em>, until you check it. Clear finished notes with one click.</p>
+          </div>
+        </li>
+        <li class="step reveal">
+          <div class="step-time">Midnight</div>
+          <div class="step-card" data-color="purple">
+            <i class="pin"></i>
+            <h3>5. A fresh board every morning</h3>
+            <p>At midnight the board moves to the new day. Every-day tasks come back unchecked, and yesterday's leftovers are waiting for you.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <!-- Features ------------------------------------------------------------>
+    <section class="section section-alt" id="features">
+      <div class="section-head reveal">
+        <p class="eyebrow">Features</p>
+        <h2>Small, calm, and always in front of you</h2>
+      </div>
+      <div class="features">
+        <article class="feature reveal"><span class="icon" aria-hidden="true">💻</span><h3>Opens at login</h3><p>The desktop app registers itself to start when you sign in on Windows, macOS or Linux.</p></article>
+        <article class="feature reveal"><span class="icon" aria-hidden="true">🌙</span><h3>Wakes with your laptop</h3><p>Pendu keeps running in the background and brings the board forward when you open the lid.</p></article>
+        <article class="feature reveal"><span class="icon" aria-hidden="true">🔁</span><h3>Every-day tasks</h3><p>Habits come back unchecked each morning, so you never have to type them again.</p></article>
+        <article class="feature reveal"><span class="icon" aria-hidden="true">📎</span><h3>Carry-over</h3><p>Unfinished notes move to the next day with a <em>from</em> date, so nothing slips.</p></article>
+        <article class="feature reveal"><span class="icon" aria-hidden="true">✨</span><h3>Animated board</h3><p>Notes sway into place, pins drop in, and notes slide over when they change places.</p></article>
+        <article class="feature reveal"><span class="icon" aria-hidden="true">🔒</span><h3>Private by default</h3><p>No account and no server. Notes live on your device, and you can export them to a file.</p></article>
+      </div>
+    </section>
+
+    <!-- Get it -------------------------------------------------------------->
+    <section class="section" id="get">
+      <div class="section-head reveal">
+        <p class="eyebrow">Get it</p>
+        <h2>Two ways to use Pendu</h2>
+      </div>
+      <div class="ways">
+        <article class="way reveal">
+          <h3>In your browser</h3>
+          <p>Open the board and start pinning notes. Works on laptops, tablets and phones. Notes are saved in this browser.</p>
+          <a class="btn btn-primary" href="board.html">Open the board <span aria-hidden="true">→</span></a>
+        </article>
+        <article class="way reveal">
+          <h3>On your desktop</h3>
+          <p>The full app, which opens at login and when you wake your laptop. Needs Python 3.8+ with Tkinter.</p>
+          <pre><code>git clone https://github.com/jaisudhakar/pendu-reminder.git
+cd pendu-reminder
+python pendu.pyw</code></pre>
+          <a class="btn btn-ghost" href="https://github.com/jaisudhakar/pendu-reminder" target="_blank" rel="noopener">View on GitHub</a>
+        </article>
+      </div>
+      <p class="ways-note reveal">Moving between them? Use <strong>⋯ → Export notes</strong> on the web board, and <strong>Import notes</strong> to bring in the desktop app's <code>~/.pendu/notes.json</code>.</p>
+    </section>
+
+    <!-- Maker --------------------------------------------------------------->
+    <section class="section section-alt maker" id="maker">
+      <div class="maker-card reveal">
+        <img class="maker-photo avatar" src="https://avatars.githubusercontent.com/u/25986394?v=4&s=240" alt="Sudhakar" width="120" height="120">
+        <div class="maker-copy">
+          <p class="eyebrow">Introduced by</p>
+          <h2>Sudhakar</h2>
+          <p class="maker-role">Full-stack eCommerce developer · Coimbatore, India</p>
+          <p>8+ years building online stores. Shopify Partner (themes &amp; apps), Magento 2, PHP and Node. These days I build Shopify apps and AI developer tools. Pendu is one of my open-source projects.</p>
+        </div>
+      </div>
+
+      <h3 class="portfolio-title reveal">See more of my work</h3>
+      <div class="portfolio">
+        <a class="site reveal" data-color="yellow" href="https://onemandeveloper.com" target="_blank" rel="noopener">
+          <i class="pin"></i>
+          <strong>One Man Developer</strong>
+          <span>My main portfolio and services</span>
+          <em>onemandeveloper.com ↗</em>
+        </a>
+        <a class="site reveal" data-color="blue" href="https://sudhakar-developer.netlify.app" target="_blank" rel="noopener">
+          <i class="pin"></i>
+          <strong>Developer portfolio</strong>
+          <span>Projects and skills</span>
+          <em>sudhakar-developer.netlify.app ↗</em>
+        </a>
+        <a class="site reveal" data-color="green" href="https://sudhakar-freelancer.netlify.app" target="_blank" rel="noopener">
+          <i class="pin"></i>
+          <strong>Freelance work</strong>
+          <span>Hire me for your project</span>
+          <em>sudhakar-freelancer.netlify.app ↗</em>
+        </a>
+        <a class="site reveal" data-color="orange" href="https://sudhakar-magento.netlify.app" target="_blank" rel="noopener">
+          <i class="pin"></i>
+          <strong>Magento portfolio</strong>
+          <span>Magento 2 stores and extensions</span>
+          <em>sudhakar-magento.netlify.app ↗</em>
+        </a>
+        <a class="site reveal" data-color="purple" href="https://github.com/jaisudhakar" target="_blank" rel="noopener">
+          <i class="pin"></i>
+          <strong>GitHub</strong>
+          <span>Open-source projects, including Pendu</span>
+          <em>github.com/jaisudhakar ↗</em>
+        </a>
+      </div>
+    </section>
+
+    <!-- Final call ---------------------------------------------------------->
+    <section class="cta cork">
+      <div class="cta-note reveal" data-color="yellow">
+        <i class="pin"></i>
+        <h2 class="hand">Pin your first task.</h2>
+        <p>It takes about five seconds.</p>
+        <a class="btn btn-primary btn-lg" href="board.html">Open the board <span aria-hidden="true">→</span></a>
+      </div>
+    </section>
   </main>
 
-  <footer class="bar bottom">
-    <form class="composer" id="composer" autocomplete="off">
-      <input class="entry" id="entry" type="text" maxlength="300"
-             placeholder="Write a task for today and press Enter…" aria-label="New task">
-      <div class="composer-tools">
-        <div class="swatches" id="swatches" role="radiogroup" aria-label="Note colour"></div>
-        <label class="daily">
-          <input type="checkbox" id="daily">
-          <span class="tick" aria-hidden="true"></span>
-          Every day
-        </label>
-        <button class="stick" type="submit">Stick it</button>
-      </div>
-    </form>
+  <footer class="footer">
+    <p><strong>Pendu</strong> 📌 — introduced by <a href="https://onemandeveloper.com" target="_blank" rel="noopener">Sudhakar</a></p>
+    <p>
+      <a href="board.html">Board</a> ·
+      <a href="https://github.com/jaisudhakar/pendu-reminder" target="_blank" rel="noopener">Source on GitHub</a> ·
+      <a href="https://onemandeveloper.com" target="_blank" rel="noopener">onemandeveloper.com</a>
+    </p>
+    <p class="copy">© <span id="year">2026</span> Sudhakar</p>
   </footer>
 
-  <div class="menu" id="menu" role="menu" hidden></div>
-  <div class="toast" id="toast" role="status" hidden>
-    <span id="toast-text"></span>
-    <button type="button" id="toast-undo">Undo</button>
-  </div>
-  <input type="file" id="import-file" accept="application/json,.json" hidden>
-
-  <script src="store.js"></script>
-  <script src="app.js"></script>
+  <script src="landing.js"></script>
 </body>
 </html>

@@ -75,6 +75,8 @@ button { font: inherit; color: inherit; }
   animation: logo-in .9s cubic-bezier(.34, 1.56, .64, 1) both;
 }
 
+.logo a { color: inherit; text-decoration: none; }
+
 .date {
   font-size: 17px;
   white-space: nowrap;

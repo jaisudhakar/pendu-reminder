@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pendu — today's notes</title>
+  <meta name="description" content="Your tasks for today, pinned to a cork board as sticky notes.">
+  <meta name="theme-color" content="#6d4c33">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&display=swap">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="bar top">
+    <div class="brand">
+      <h1 class="logo"><a href="index.html" title="About Pendu">Pendu</a></h1>
+      <span class="date" id="date"></span>
+    </div>
+    <div class="actions">
+      <div class="progress">
+        <span id="progress-text">No tasks yet</span>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+      </div>
+      <button class="btn" id="clear" type="button">Clear finished</button>
+      <button class="btn icon" id="more" type="button" aria-label="More options" aria-haspopup="menu">⋯</button>
+    </div>
+  </header>
+
+  <main class="board-wrap" id="wrap">
+    <div class="board" id="board"></div>
+  </main>
+
+  <footer class="bar bottom">
+    <form class="composer" id="composer" autocomplete="off">
+      <input class="entry" id="entry" type="text" maxlength="300"
+             placeholder="Write a task for today and press Enter…" aria-label="New task">
+      <div class="composer-tools">
+        <div class="swatches" id="swatches" role="radiogroup" aria-label="Note colour"></div>
+        <label class="daily">
+          <input type="checkbox" id="daily">
+          <span class="tick" aria-hidden="true"></span>
+          Every day
+        </label>
+        <button class="stick" type="submit">Stick it</button>
+      </div>
+    </form>
+  </footer>
+
+  <div class="menu" id="menu" role="menu" hidden></div>
+  <div class="toast" id="toast" role="status" hidden>
+    <span id="toast-text"></span>
+    <button type="button" id="toast-undo">Undo</button>
+  </div>
+  <input type="file" id="import-file" accept="application/json,.json" hidden>
+
+  <script src="store.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
