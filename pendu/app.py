@@ -26,6 +26,13 @@ NOTE_W, NOTE_H = 210, 180
 GAP = 26
 MARGIN = 30
 
+# Animation timings. A new note floats up from the input bar to its place
+# (FLY_MS), then its pin drops in (PIN_MS). Notes that change place slide.
+FLY_MS = 1200
+PIN_MS = 420
+SLIDE_MS = 380
+FRAME_MS = 15
+
 CORK = "#c49a6c"
 CORK_DOT = ("#b58a5c", "#d2aa7e", "#a97f53")
 INK = "#2f2a24"
@@ -58,6 +65,15 @@ def _blend(hex_a, hex_b, t):
 
 def _shorten(text, limit=110):
     return text if len(text) <= limit else text[:limit - 1].rstrip() + "…"
+
+
+def _ease_in_out(t):
+    return 4 * t ** 3 if t < 0.5 else 1 - (-2 * t + 2) ** 3 / 2
+
+
+def _ease_out_back(t):
+    # Overshoots a little past 1 before settling, like paper pressed flat.
+    return 1 + 2.70158 * (t - 1) ** 3 + 1.70158 * (t - 1) ** 2
 
 
 class SingleInstance:
@@ -107,6 +123,10 @@ class PenduApp:
         self.day = today()
         self.last_tick = time.time()
         self._pending_toggle = None
+        self._slots = {}       # task id -> (x, y) of its place on the board
+        self._flights = {}     # task id -> animation of a note on the move
+        self._anim_job = None
+        self.board_height = 1
 
         self.root = tk.Tk()
         self.root.title("Pendu — today's notes")
@@ -232,7 +252,8 @@ class PenduApp:
 
     # -- drawing -------------------------------------------------------------
 
-    def redraw(self):
+    def redraw(self, animate=False):
+        """Draw the whole board. With ``animate``, notes that moved slide over."""
         c = self.canvas
         c.delete("all")
         width = max(c.winfo_width(), NOTE_W + 2 * MARGIN)
@@ -242,15 +263,24 @@ class PenduApp:
         tasks = self.store.tasks_for(self.day)
         rows = max(1, math.ceil(len(tasks) / cols))
         height = max(c.winfo_height(), 2 * MARGIN + rows * (NOTE_H + GAP))
+        self.board_height = height
         self._draw_cork(width, height)
+
+        slots = {}
+        for i, task in enumerate(tasks):
+            col, row = i % cols, i // cols
+            slots[task["id"]] = (left + col * (NOTE_W + GAP) + NOTE_W // 2,
+                                 MARGIN + row * (NOTE_H + GAP) + NOTE_H // 2 + 8)
+        if animate:
+            self._start_slides(slots)
+        self._slots = slots
 
         if not tasks:
             self._draw_note(width // 2, MARGIN + NOTE_H // 2 + 20, None)
-        for i, task in enumerate(tasks):
-            col, row = i % cols, i // cols
-            cx = left + col * (NOTE_W + GAP) + NOTE_W // 2
-            cy = MARGIN + row * (NOTE_H + GAP) + NOTE_H // 2 + 8
-            self._draw_note(cx, cy, task)
+        for task in tasks:
+            if task["id"] not in self._flights:
+                self._draw_note(*slots[task["id"]], task)
+        self._draw_flights(time.perf_counter())
 
         c.configure(scrollregion=(0, 0, width, height))
         self._update_header()
@@ -263,7 +293,15 @@ class PenduApp:
             color = rnd.choice(CORK_DOT)
             self.canvas.create_oval(x - r, y - r, x + r, y + r, fill=color, outline="")
 
-    def _draw_note(self, cx, cy, task):
+    def _draw_note(self, cx, cy, task, scale=1.0, spin=0.0, lift=0.0, pin_drop=0.0,
+                   moving=False):
+        """Draw one note centred on (cx, cy).
+
+        The keyword arguments are for notes on the move: ``scale`` and
+        ``spin`` change size and tilt, ``lift`` raises the note off the board
+        (longer, softer shadow) and ``pin_drop`` holds the pin above it
+        (0 = pinned, 1 = no pin yet). Moving notes don't react to the mouse.
+        """
         c = self.canvas
         if task is None:
             key, angle, paper, pin, done = "empty", -2.0, PAPER["yellow"], PIN["yellow"], False
@@ -283,37 +321,51 @@ class PenduApp:
             fill, edge, ink = _blend(fill, "#ffffff", 0.45), _blend(edge, "#ffffff", 0.45), FADED_INK
 
         tag = f"note-{key}"
+        tags = (tag, "moving") if moving else (tag,)
+        angle += spin
         rad = math.radians(angle)
+        s = scale
 
         def pt(dx, dy):
+            dx, dy = dx * s, dy * s
             return (cx + dx * math.cos(rad) - dy * math.sin(rad),
                     cy + dx * math.sin(rad) + dy * math.cos(rad))
 
         hw, hh = NOTE_W / 2, NOTE_H / 2
         corners = [pt(-hw, -hh), pt(hw, -hh), pt(hw, hh - 14), pt(hw - 14, hh), pt(-hw, hh)]
-        shadow = [(x + 4, y + 6) for x, y in corners]
-        c.create_polygon(shadow, fill="#8f6c47", outline="", tags=tag)
-        c.create_polygon(corners, fill=fill, outline=edge, width=1, tags=tag)
+        # The higher the note floats, the further and fainter its shadow.
+        shadow = [(x + 4 + 18 * lift, y + 6 + 26 * lift) for x, y in corners]
+        c.create_polygon(shadow, fill=_blend("#8f6c47", CORK, 0.55 * lift), outline="",
+                         tags=tags)
+        c.create_polygon(corners, fill=fill, outline=edge, width=1, tags=tags)
         # Folded corner.
         c.create_polygon([pt(hw, hh - 14), pt(hw - 14, hh - 14), pt(hw - 14, hh)],
-                         fill=edge, outline=edge, tags=tag)
+                         fill=edge, outline=edge, tags=tags)
         # Sticky strip at the top.
         c.create_polygon([pt(-hw, -hh), pt(hw, -hh), pt(hw, -hh + 22), pt(-hw, -hh + 22)],
-                         fill=_blend(fill, edge, 0.5), outline="", tags=tag)
+                         fill=_blend(fill, edge, 0.5), outline="", tags=tags)
 
-        font = (*self.hand_font, "overstrike") if done else self.hand_font
+        family, size = self.hand_font
+        font = (family, max(1, round(size * s)))
+        if done:
+            font += ("overstrike",)
         tx, ty = pt(0, 2)
-        c.create_text(tx, ty, text=text, width=NOTE_W - 34, fill=ink, font=font,
-                      angle=-angle, justify="center", tags=tag)
+        c.create_text(tx, ty, text=text, width=(NOTE_W - 34) * s, fill=ink, font=font,
+                      angle=-angle, justify="center", tags=tags)
 
-        # Push pin.
-        px, py = pt(0, -hh + 10)
-        c.create_oval(px - 7, py - 5, px + 9, py + 11, fill="#7a5a3a",
-                      outline="", tags=tag)
-        c.create_oval(px - 8, py - 8, px + 8, py + 8, fill=pin, outline=_blend(pin, "#000000", 0.3),
-                      tags=tag)
-        c.create_oval(px - 4, py - 5, px, py - 1, fill=_blend(pin, "#ffffff", 0.6), outline="",
-                      tags=tag)
+        # Push pin. While it drops in, it hangs above the note, looks bigger
+        # (closer to you) and its shadow on the note firms up as it comes down.
+        if pin_drop < 1:
+            px, py = pt(0, -hh + 10)
+            r = 8 * s * (1 - 0.4 * pin_drop)
+            c.create_oval(px + s - r, py + 3 * s - r, px + s + r, py + 3 * s + r,
+                          fill=_blend("#7a5a3a", fill, pin_drop), outline="", tags=tags)
+            py -= 70 * s * pin_drop
+            r = 8 * s * (1 + 0.7 * pin_drop)
+            c.create_oval(px - r, py - r, px + r, py + r, fill=pin,
+                          outline=_blend(pin, "#000000", 0.3), tags=tags)
+            c.create_oval(px - r / 2, py - r * 0.625, px, py - r / 8,
+                          fill=_blend(pin, "#ffffff", 0.6), outline="", tags=tags)
 
         if task is None:
             return
@@ -321,11 +373,12 @@ class PenduApp:
         # Checkbox.
         bx, by = pt(-hw + 24, hh - 22)
         box = f"box-{key}"
-        c.create_rectangle(bx - 9, by - 9, bx + 9, by + 9, fill="#fffdf5",
-                           outline=_blend(edge, "#000000", 0.35), width=2, tags=(tag, box))
+        b = 9 * s
+        c.create_rectangle(bx - b, by - b, bx + b, by + b, fill="#fffdf5",
+                           outline=_blend(edge, "#000000", 0.35), width=2, tags=(*tags, box))
         if done:
-            c.create_line(bx - 5, by, bx - 1, by + 5, bx + 7, by - 6, fill="#2e7d32",
-                          width=3, capstyle="round", tags=(tag, box))
+            c.create_line(bx - 5 * s, by, bx - s, by + 5 * s, bx + 7 * s, by - 6 * s,
+                          fill="#2e7d32", width=3, capstyle="round", tags=(*tags, box))
 
         label = None
         if task.get("daily"):
@@ -335,7 +388,11 @@ class PenduApp:
         if label:
             lx, ly = pt(hw - 22, hh - 22)
             c.create_text(lx, ly, text=label, anchor="e", angle=-angle, fill=_blend(ink, fill, 0.35),
-                          font=(UI_FONT[0], UI_FONT[1] - 2, "italic"), tags=tag)
+                          font=(UI_FONT[0], max(1, round((UI_FONT[1] - 2) * s)), "italic"),
+                          tags=tags)
+
+        if moving:
+            return
 
         # Delete button, only visible on hover.
         dx, dy = pt(hw - 14, -hh + 12)
@@ -350,6 +407,123 @@ class PenduApp:
         c.tag_bind(tag, "<Button-1>", lambda e, k=key: self._on_click(e, k))
         c.tag_bind(tag, "<Double-Button-1>", lambda e, k=key: self._edit(k))
         c.tag_bind(tag, RIGHT_CLICK, lambda e, k=key: self._menu(e, k))
+
+    # -- animation -----------------------------------------------------------
+
+    def _launch_point(self):
+        """Where a new note starts: just below the board, above the input box."""
+        c = self.canvas
+        x = self.entry.winfo_rootx() - c.winfo_rootx() + min(self.entry.winfo_width() // 3, 220)
+        return c.canvasx(x), c.canvasy(c.winfo_height()) + 40
+
+    def _pose(self, key, flight, now):
+        """Where a moving note is at ``now``, and whether it has arrived."""
+        x2, y2 = self._slots[key]
+        ms = (now - flight["start"]) * 1000
+        pose = {"x": x2, "y": y2}
+        if flight["kind"] == "slide":
+            t = min(1.0, ms / SLIDE_MS)
+            e = _ease_in_out(t)
+            x0, y0 = flight["from"]
+            pose.update(x=x0 + (x2 - x0) * e, y=y0 + (y2 - y0) * e,
+                        lift=0.35 * math.sin(math.pi * t), scale=1 + 0.04 * math.sin(math.pi * t))
+            return pose, t >= 1
+
+        if ms < FLY_MS:
+            # Float up along a curve, swaying and turning like a sheet of
+            # paper, growing from small to full size as it nears the board.
+            t = ms / FLY_MS
+            e = _ease_in_out(t)
+            side = flight["side"]
+            x0, y0 = self._launch_point()
+            x1, y1 = x0 + (x2 - x0) * 0.25, min(y0, y2) - 90
+            x = (1 - e) ** 2 * x0 + 2 * (1 - e) * e * x1 + e ** 2 * x2
+            y = (1 - e) ** 2 * y0 + 2 * (1 - e) * e * y1 + e ** 2 * y2
+            x += side * 26 * math.sin(2 * math.pi * t) * (1 - t)
+            pose.update(x=x, y=y, lift=1 - e, pin_drop=1.0,
+                        spin=side * 18 * math.cos(2.5 * math.pi * t) * (1 - t) ** 2,
+                        scale=0.35 + 0.65 * _ease_out_back(t))
+            return pose, False
+
+        # Landed: the pin falls in, and when it hits, the note gives a
+        # little bump and a few lines burst out around the pin.
+        u = min(1.0, (ms - FLY_MS) / PIN_MS)
+        fall = min(1.0, u / 0.55)
+        pose["pin_drop"] = 1 - fall ** 2
+        if fall >= 1:
+            k = (u - 0.55) / 0.45
+            pose["scale"] = 1 - 0.035 * math.sin(math.pi * k)
+            pose["burst"] = k
+        return pose, u >= 1
+
+    def _draw_flights(self, now):
+        # Slides first so a note flying in passes over them.
+        for key, flight in sorted(self._flights.items(), key=lambda kv: kv[1]["kind"] == "fly"):
+            if key not in self._slots:
+                continue
+            pose, _ = self._pose(key, flight, now)
+            task = self.store.get(key)
+            self._draw_note(pose["x"], pose["y"], task, scale=pose.get("scale", 1.0),
+                            spin=pose.get("spin", 0.0), lift=pose.get("lift", 0.0),
+                            pin_drop=pose.get("pin_drop", 0.0), moving=True)
+            if "burst" in pose:
+                self._draw_burst(task, pose)
+
+    def _draw_burst(self, task, pose):
+        color = task.get("color", "yellow")
+        paper, pin = PAPER.get(color, PAPER["yellow"])[0], PIN.get(color, "#e53935")
+        angle = math.radians((int(task["id"][:4], 16) % 9 - 4) * 0.9)
+        # The pin sits 80px above the note's centre, turned with the note.
+        px = pose["x"] + 80 * pose["scale"] * math.sin(angle)
+        py = pose["y"] - 80 * pose["scale"] * math.cos(angle)
+        k = pose["burst"]
+        ink = _blend(pin, paper, k)
+        for i in range(8):
+            a = math.pi * i / 4 + math.pi / 8
+            r1, r2 = 12 + 10 * k, 17 + 16 * k
+            self.canvas.create_line(px + r1 * math.cos(a), py + r1 * math.sin(a),
+                                    px + r2 * math.cos(a), py + r2 * math.sin(a),
+                                    fill=ink, width=2, capstyle="round", tags="moving")
+
+    def _start_slides(self, slots):
+        """Slide every note whose place changed (a note flying in just retargets)."""
+        now = time.perf_counter()
+        for key, new in slots.items():
+            flight = self._flights.get(key)
+            if flight and flight["kind"] == "fly":
+                continue
+            if flight:
+                pose, _ = self._pose(key, flight, now)
+                old = (pose["x"], pose["y"])
+            else:
+                old = self._slots.get(key)
+            if old and old != new:
+                self._flights[key] = {"kind": "slide", "start": now, "from": old}
+        self._run_animation()
+
+    def _run_animation(self):
+        if self._flights and self._anim_job is None:
+            self._anim_job = self.root.after(FRAME_MS, self._animate)
+
+    def _animate(self):
+        self._anim_job = None
+        now = time.perf_counter()
+        landed = [key for key, flight in self._flights.items()
+                  if key not in self._slots or self._pose(key, flight, now)[1]]
+        for key in landed:
+            del self._flights[key]
+        if landed:
+            self.redraw()  # pins the arrived notes for good, and draws the rest
+        else:
+            self.canvas.delete("moving")
+            self._draw_flights(now)
+        self._run_animation()
+
+    def _scroll_into_view(self, y):
+        c = self.canvas
+        top, bottom = c.canvasy(0), c.canvasy(c.winfo_height())
+        if y - NOTE_H / 2 < top or y + NOTE_H / 2 > bottom:
+            c.yview_moveto(max(0.0, (y - c.winfo_height() / 2) / self.board_height))
 
     def _update_header(self):
         self.date_label.config(text=self.day.strftime("%A, %d %B %Y"))
@@ -398,7 +572,7 @@ class PenduApp:
     def _toggle(self, key):
         self._pending_toggle = None
         self.store.toggle(key, self.day)
-        self.redraw()
+        self.redraw(animate=True)
 
     def _add(self):
         if getattr(self.entry, "placeholder", False):
@@ -406,13 +580,17 @@ class PenduApp:
         text = self.entry.get().strip()
         if not text:
             return
-        self.store.add(text, self.day, color=self.new_color.get(), daily=self.new_daily.get())
+        task = self.store.add(text, self.day, color=self.new_color.get(),
+                              daily=self.new_daily.get())
         self.entry.delete(0, "end")
         # Rotate to the next colour so the board stays colourful.
         nxt = COLORS[(COLORS.index(self.new_color.get()) + 1) % len(COLORS)]
         self._pick_color(nxt)
-        self.redraw()
-        self.canvas.yview_moveto(1.0)
+        # The new note flies from the input bar to its place on the board.
+        self._flights[task["id"]] = {"kind": "fly", "start": time.perf_counter(),
+                                     "side": random.choice((-1, 1))}
+        self.redraw(animate=True)
+        self._scroll_into_view(self._slots[task["id"]][1])
 
     def _edit(self, key):
         if self._pending_toggle:
@@ -430,7 +608,7 @@ class PenduApp:
         if messagebox.askyesno("Remove note", f"Remove this note?\n\n{_shorten(task['text'], 80)}",
                                parent=self.root):
             self.store.delete(key)
-            self.redraw()
+            self.redraw(animate=True)
 
     def _menu(self, event, key):
         task = self.store.get(key)
@@ -453,7 +631,7 @@ class PenduApp:
 
     def _clear_done(self):
         self.store.clear_done(self.day)
-        self.redraw()
+        self.redraw(animate=True)
 
     def _toggle_autostart(self):
         try:

@@ -7,6 +7,7 @@ Your tasks for today, pinned to a cork board as sticky notes. They pop up when y
 - **Opens at login.** The board opens as soon as you sign in to your computer.
 - **Opens when you wake the laptop.** Pendu keeps running in the background. When you open the lid after sleep, the board comes back to the front.
 - **A new board every morning.** At midnight the board switches to the new day and shows itself again.
+- **Notes fly onto the board.** A new note floats up from the input bar, sways like paper as it drifts to its place, and gets pinned with a little *pop*. When notes change places (you tick one off, remove one, or add a new one) they slide over instead of jumping.
 - **Tick things off.** Click a note to check it. It fades and gets crossed out, and the header shows how many are done.
 - **Nothing gets forgotten.** A task you didn't finish stays on the board the next day, marked *from MM/DD*, until you check it.
 - **Every-day tasks.** Tick **Every day** when you add a note, for things like "Drink water". It comes back unchecked each day.
