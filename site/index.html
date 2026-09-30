@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pendu · Today's Tasks, Pinned To Your Desktop</title>
+  <meta name="description" content="Pendu pins today's tasks to a cork board as sticky notes, and puts the board in front of you when you log in, open your laptop, or start a new day. Free for Windows, macOS, Linux and the web.">
+  <meta name="theme-color" content="#6d4c33">
+  <meta property="og:title" content="Pendu · Today's Tasks, Pinned To Your Desktop">
+  <meta property="og:description" content="A cork board of sticky notes that pops up when you open your laptop. Free and open source.">
+  <meta property="og:image" content="screenshot.png">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>📌</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap">
+  <link rel="stylesheet" href="site.css">
+  <script>document.documentElement.classList.add("js");</script>
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a class="nav-brand" href="#top" aria-label="Pendu home"><span aria-hidden="true">📌</span> Pendu</a>
+      <nav class="nav-links" aria-label="Sections">
+        <a href="#flow">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+        <a href="#faq">FAQ</a>
+      </nav>
+      <a class="btn btn-small" href="#download">Get Pendu</a>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero ------------------------------------------------------------- -->
+    <section class="hero" id="top">
+      <div class="wrap hero-inner">
+        <div class="hero-copy reveal">
+          <p class="eyebrow">Free · Windows · macOS · Linux · Web</p>
+          <h1>Today's tasks,<br><span class="scribble">pinned</span> where you'll see them.</h1>
+          <p class="lede">Pendu is a cork board of sticky notes that pops up when you open your laptop. Jot today's tasks, tick them off, and whatever you don't finish stays pinned until you do.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#download">Download for desktop</a>
+            <a class="btn btn-ghost" href="app/">Open in your browser →</a>
+          </div>
+          <p class="fine">No account, no sign-up. Your notes stay on your computer.</p>
+        </div>
+
+        <div class="hero-demo reveal">
+          <div class="window" id="demo">
+            <div class="window-bar" aria-hidden="true">
+              <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+              <span class="window-title">Pendu</span>
+            </div>
+            <iframe src="app/?demo" title="Live Pendu board: try adding, ticking and removing notes" loading="lazy"></iframe>
+          </div>
+          <p class="demo-hint"><span class="arrow" aria-hidden="true">↑</span> This board works. Type a task and press Enter, or click a note to tick it off.</p>
+        </div>
+      </div>
+      <div class="hero-notes" aria-hidden="true">
+        <span class="deco note-yellow" style="--x: 2%;  --y: 88%; --r: -8deg;"></span>
+        <span class="deco note-pink"   style="--x: 90%; --y: 10%; --r: 7deg;"></span>
+        <span class="deco note-blue"   style="--x: 94%; --y: 72%; --r: -5deg;"></span>
+      </div>
+    </section>
+
+    <!-- The daily flow ---------------------------------------------------- -->
+    <section class="section" id="flow">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">How it works</p>
+          <h2>It shows up. You don't have to go looking.</h2>
+          <p>Most to-do apps wait for you to open them. Pendu opens itself at the moments you're about to start working.</p>
+        </header>
+
+        <ol class="flow">
+          <li class="flow-step reveal">
+            <div class="flow-art art-login" aria-hidden="true">
+              <div class="mini-screen"><div class="mini-board"><i class="y"></i><i class="p"></i><i class="g"></i></div></div>
+            </div>
+            <span class="flow-num">1</span>
+            <h3>You log in</h3>
+            <p>The board opens as soon as you sign in to your computer. Pendu sets this up for you the first time it runs.</p>
+          </li>
+          <li class="flow-step reveal">
+            <div class="flow-art art-wake" aria-hidden="true">
+              <div class="lid"></div>
+              <div class="mini-screen"><div class="mini-board"><i class="b"></i><i class="y"></i></div></div>
+            </div>
+            <span class="flow-num">2</span>
+            <h3>You open the lid</h3>
+            <p>Pendu keeps running quietly. When your laptop wakes from sleep, the board comes back to the front.</p>
+          </li>
+          <li class="flow-step reveal">
+            <div class="flow-art art-midnight" aria-hidden="true">
+              <div class="moon"></div>
+              <div class="cal"><b>30</b><b class="next">01</b></div>
+            </div>
+            <span class="flow-num">3</span>
+            <h3>A new day starts</h3>
+            <p>At midnight the board turns over to the new date and shows itself again, ready for today's list.</p>
+          </li>
+          <li class="flow-step reveal">
+            <div class="flow-art art-carry" aria-hidden="true">
+              <div class="carry-note"><span>Pay the bill</span><em>from 09/29</em></div>
+            </div>
+            <span class="flow-num">4</span>
+            <h3>Nothing slips</h3>
+            <p>A task you didn't finish stays on the board the next day, marked <em>from MM/DD</em>, until you tick it off.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Features ----------------------------------------------------------- -->
+    <section class="section section-cork" id="features">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Features</p>
+          <h2>Paper notes, with a few tricks.</h2>
+        </header>
+
+        <div class="notes-grid">
+          <article class="feature note-yellow reveal" style="--r: -1.5deg;">
+            <span class="pin" aria-hidden="true"></span>
+            <h3>Notes fly onto the board</h3>
+            <p>A new note floats up from the input bar, sways like paper and gets pinned with a little <em>pop</em>. Notes slide over when they change places.</p>
+          </article>
+          <article class="feature note-pink reveal" style="--r: 1.2deg;">
+            <span class="pin" aria-hidden="true"></span>
+            <h3>Tick things off</h3>
+            <p>Click a note to check it. It fades and gets crossed out, and the progress bar at the top fills up.</p>
+          </article>
+          <article class="feature note-blue reveal" style="--r: -.8deg;">
+            <span class="pin" aria-hidden="true"></span>
+            <h3>Every-day tasks</h3>
+            <p>Tick <b>Every day</b> for things like "Drink water". It comes back unchecked each morning.</p>
+          </article>
+          <article class="feature note-green reveal" style="--r: 1.6deg;">
+            <span class="pin" aria-hidden="true"></span>
+            <h3>Carry-over</h3>
+            <p>Yesterday's unfinished tasks move to today, with the date they were written, so they can't quietly disappear.</p>
+          </article>
+          <article class="feature note-orange reveal" style="--r: -1.2deg;">
+            <span class="pin" aria-hidden="true"></span>
+            <h3>Six paper colours</h3>
+            <p>Pick a colour before you stick a note, or change it later from the right-click menu. Double-click to edit.</p>
+          </article>
+          <article class="feature note-purple reveal" style="--r: .9deg;">
+            <span class="pin" aria-hidden="true"></span>
+            <h3>Yours, offline</h3>
+            <p>Notes live in one small <code>notes.json</code> file on your computer. No account, no cloud, no tracking.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- Desktop screenshot ------------------------------------------------ -->
+    <section class="section" id="desktop">
+      <div class="wrap split">
+        <div class="split-copy reveal">
+          <p class="eyebrow">On your desktop</p>
+          <h2>A board that stays out of the way until you need it.</h2>
+          <ul class="ticks">
+            <li>Close the window and it just minimises. Pendu keeps watching for wake-up.</li>
+            <li>Only one copy runs at a time. Launching it again brings the board to the front.</li>
+            <li>Switch <b>Open when I log in</b> on or off from the top-right corner.</li>
+            <li>Right-click a note for its colour, repeat-every-day and remove options.</li>
+          </ul>
+        </div>
+        <figure class="shot reveal">
+          <img src="screenshot.png" width="960" height="660" alt="The Pendu desktop app: six sticky notes pinned to a cork board, one ticked off and crossed out, with the date and progress in the header." loading="lazy">
+        </figure>
+      </div>
+    </section>
+
+    <!-- Download ------------------------------------------------------------ -->
+    <section class="section section-wood" id="download">
+      <div class="wrap">
+        <header class="section-head reveal">
+          <p class="eyebrow">Download</p>
+          <h2>Free, for every computer you own.</h2>
+          <p>The desktop app needs Python 3.8 or newer with Tkinter. Nothing else to install.</p>
+        </header>
+
+        <div class="download reveal">
+          <div class="tabs" role="tablist" aria-label="Operating system">
+            <button class="tab" role="tab" id="tab-windows" aria-controls="panel-windows" aria-selected="true" data-os="windows">Windows</button>
+            <button class="tab" role="tab" id="tab-mac" aria-controls="panel-mac" aria-selected="false" tabindex="-1" data-os="mac">macOS</button>
+            <button class="tab" role="tab" id="tab-linux" aria-controls="panel-linux" aria-selected="false" tabindex="-1" data-os="linux">Linux</button>
+            <button class="tab" role="tab" id="tab-web" aria-controls="panel-web" aria-selected="false" tabindex="-1" data-os="web">Web</button>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-windows" aria-labelledby="tab-windows">
+            <ol class="steps">
+              <li>Install <a href="https://www.python.org/downloads/">Python from python.org</a>. Tkinter comes with it.</li>
+              <li><a class="btn btn-primary btn-small" href="https://github.com/jaisudhakar/pendu-reminder/archive/refs/heads/main.zip">Download Pendu (.zip)</a> and unzip it anywhere.</li>
+              <li>Double-click <code>pendu.pyw</code>. That's it: the board opens, and it will open at every login from now on.</li>
+            </ol>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-mac" aria-labelledby="tab-mac" hidden>
+            <ol class="steps">
+              <li>Install <a href="https://www.python.org/downloads/">Python from python.org</a> (or <code>brew install python-tk</code> with Homebrew).</li>
+              <li>Download and start Pendu from Terminal:
+                <div class="code"><pre><code>git clone https://github.com/jaisudhakar/pendu-reminder.git
+cd pendu-reminder
+python3 pendu.pyw</code></pre><button class="copy" type="button">Copy</button></div>
+              </li>
+              <li>Pendu adds itself to your login items the first time it runs.</li>
+            </ol>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-linux" aria-labelledby="tab-linux" hidden>
+            <ol class="steps">
+              <li>Install Tkinter: <code>sudo apt install python3-tk</code> (Debian/Ubuntu) or <code>sudo dnf install python3-tkinter</code> (Fedora).</li>
+              <li>Download and start Pendu:
+                <div class="code"><pre><code>git clone https://github.com/jaisudhakar/pendu-reminder.git
+cd pendu-reminder
+python3 pendu.pyw</code></pre><button class="copy" type="button">Copy</button></div>
+              </li>
+              <li>Pendu adds itself to <code>~/.config/autostart</code> the first time it runs.</li>
+            </ol>
+          </div>
+
+          <div class="panel" role="tabpanel" id="panel-web" aria-labelledby="tab-web" hidden>
+            <ol class="steps">
+              <li><a class="btn btn-primary btn-small" href="app/">Open Pendu in your browser</a>. Nothing to install.</li>
+              <li>Notes are saved in this browser. Use <b>⋯ → Export notes</b> and <b>Import notes</b> to move them to and from the desktop app.</li>
+              <li>Pin the tab or add it to your home screen. A browser tab can't open at login, but the notes settle back onto the board when you return on a new day.</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ ----------------------------------------------------------------- -->
+    <section class="section" id="faq">
+      <div class="wrap narrow">
+        <header class="section-head reveal">
+          <p class="eyebrow">FAQ</p>
+          <h2>Questions, answered.</h2>
+        </header>
+        <div class="faq reveal">
+          <details>
+            <summary>Is Pendu really free?</summary>
+            <p>Yes. It's free and open source. The code is on <a href="https://github.com/jaisudhakar/pendu-reminder">GitHub</a>.</p>
+          </details>
+          <details>
+            <summary>Where are my notes stored?</summary>
+            <p>On the desktop, in <code>~/.pendu/notes.json</code>. Set the <code>PENDU_HOME</code> environment variable, or pass <code>--data FILE</code>, to keep them somewhere else. On the web, they're saved in your browser.</p>
+          </details>
+          <details>
+            <summary>How do I stop it opening at login?</summary>
+            <p>Untick <b>Open when I log in</b> in the top-right corner of the board, or run <code>python -m pendu --remove-autostart</code>.</p>
+          </details>
+          <details>
+            <summary>What happens to tasks I don't finish?</summary>
+            <p>They stay on the board the next day, marked with the date you wrote them, until you tick them off. Finished one-off notes can be cleared with <b>Clear finished</b>.</p>
+          </details>
+          <details>
+            <summary>Can I use the web and desktop versions together?</summary>
+            <p>Yes. Both use the same <code>notes.json</code> format. Export from one and import into the other.</p>
+          </details>
+          <details>
+            <summary>I moved the Pendu folder and it stopped opening at login.</summary>
+            <p>Turn <b>Open when I log in</b> off and on again so it points to the new place.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- Closing CTA --------------------------------------------------------- -->
+    <section class="closing">
+      <div class="wrap closing-inner reveal">
+        <div class="closing-note note-yellow">
+          <span class="pin" aria-hidden="true"></span>
+          <p class="closing-title">Start tomorrow with a list that's already there.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#download">Download Pendu</a>
+            <a class="btn btn-ghost" href="app/">Try it in your browser</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer-inner">
+      <span class="nav-brand"><span aria-hidden="true">📌</span> Pendu</span>
+      <nav aria-label="Footer">
+        <a href="app/">Web app</a>
+        <a href="https://github.com/jaisudhakar/pendu-reminder">GitHub</a>
+        <a href="https://github.com/jaisudhakar/pendu-reminder/issues">Report a problem</a>
+      </nav>
+      <span class="fine">Made by Sudhakar. Free and open source.</span>
+    </div>
+  </footer>
+
+  <script src="site.js"></script>
+</body>
+</html>

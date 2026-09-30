@@ -696,6 +696,8 @@ button { font: inherit; color: inherit; }
 @media (max-width: 400px) {
   .brand { flex-direction: column; gap: 2px; }
   .swatch { width: 21px; }
+  .composer-tools { gap: 8px; flex-wrap: wrap; }
+  .swatches { gap: 3px; }
 }
 
 @media (prefers-reduced-motion: reduce) {

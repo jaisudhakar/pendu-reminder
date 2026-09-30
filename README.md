@@ -77,6 +77,19 @@ It has the same notes, colours, every-day tasks and carry-over rules, and the sa
 - On a touch screen, long-press a note to open its menu.
 - A browser tab can't open at login. When you come back to the tab on a new day, or after a while away, the notes settle onto the board again.
 
+## Product page
+
+The `site/` folder is Pendu's product page: what Pendu does, how the day works, the features, download steps for each system and an FAQ. It has a live board at the top that visitors can try (the web board opened with `?demo`, which starts with a few sample notes and keeps them apart from your real ones).
+
+The **Deploy site to GitHub Pages** workflow publishes it on every push to `main`, with the web board at `/app/`. To switch it on, go to the repo's **Settings → Pages** and set **Source** to **GitHub Actions**. The site then lives at `https://jaisudhakar.github.io/pendu-reminder/`.
+
+To preview it locally, build it the same way the workflow does:
+
+```bash
+mkdir -p _site/app && cp -r site/. _site/ && cp -r web/. _site/app/ && cp docs/screenshot.png _site/
+python -m http.server 8000 -d _site   # then open http://localhost:8000
+```
+
 ## Development
 
 ```bash
@@ -90,3 +103,4 @@ Code layout:
 - `pendu/autostart.py`: registering Pendu to open at login on Windows, macOS and Linux
 - `web/store.js`: the same task rules as `pendu/store.py`, saved in the browser
 - `web/app.js`, `web/style.css`, `web/index.html`: the web cork board and its animations
+- `site/`: the product page; `.github/workflows/pages.yml` publishes it with the web board
