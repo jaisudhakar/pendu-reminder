@@ -1,0 +1,41 @@
+# Publishes the website to GitHub Pages: the product page from site/, with
+# the web board from web/ served under /app/.
+#
+# One-time setup: Settings → Pages → Build and deployment → Source: GitHub Actions.
+name: Website
+
+on:
+  push:
+    paths: ["site/**", "web/**", ".github/workflows/pages.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    # Only the default branch goes live; pushes to other branches are ignored.
+    if: github.ref_name == github.event.repository.default_branch
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Put the site together
+        run: |
+          mkdir -p _site
+          cp -r site/. _site/
+          cp -r web _site/app
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
