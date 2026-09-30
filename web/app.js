@@ -8,7 +8,11 @@
 (function () {
   "use strict";
 
-  const { TaskStore, COLORS, today } = window.Pendu;
+  const { TaskStore, COLORS, today, addDays } = window.Pendu;
+
+  // index.html?demo is the board embedded on the product page: it keeps its
+  // own notes apart from the real board and starts with a few samples.
+  const DEMO = new URLSearchParams(location.search).has("demo");
 
   const NOTE_W = 210, NOTE_H = 180;
   const GAP = 26;
@@ -48,7 +52,8 @@
   const progressText = $("progress-text");
   const progressFill = $("progress-fill");
 
-  const store = new TaskStore();
+  const store = new TaskStore(null, DEMO ? "pendu.demo" : undefined);
+  if (DEMO && !store.tasks.length) seedDemo();
   let day = today();
   let newColor = COLORS[0];
 
@@ -58,6 +63,15 @@
   let frame = null;
   let reorderTimer = null;
   let pendingToggle = null;
+
+  function seedDemo() {
+    const d = today();
+    store.add("Reply to Priya's email", addDays(d, -1), { color: "pink" });
+    store.add("Drink water 💧", d, { color: "blue", daily: true });
+    store.add("Stand-up at 10:00", d, { color: "yellow" });
+    const milk = store.add("Buy milk", d, { color: "green" });
+    store.toggle(milk.id, d);
+  }
 
   // -- small helpers ---------------------------------------------------------
 
@@ -907,5 +921,5 @@
 
   corkTexture();
   render({ intro: true });
-  if (window.matchMedia("(pointer: fine)").matches) entry.focus({ preventScroll: true });
+  if (!DEMO && window.matchMedia("(pointer: fine)").matches) entry.focus({ preventScroll: true });
 })();

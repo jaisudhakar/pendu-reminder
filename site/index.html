@@ -30,6 +30,7 @@
         <a href="#try">Try it</a>
         <a href="#download">Download</a>
         <a href="#faq">FAQ</a>
+        <a href="#maker">Maker</a>
       </nav>
       <a class="btn btn-small" href="#download">Get Pendu</a>
     </div>
@@ -155,11 +156,11 @@
     <section class="try" id="try">
       <div class="wrap">
         <h2 class="section-title">Try it right here</h2>
-        <p class="section-sub">This is the real board, running in your browser. Add a note, click it, right-click it.</p>
+        <p class="section-sub">This is the real board, running in your browser, with a few sample notes. Add a note, click one to tick it off, right-click for more.</p>
         <div class="app-frame">
           <div class="app-frame-bar" aria-hidden="true"><i></i><i></i><i></i><span>Pendu</span></div>
-          <div class="app-frame-body" id="app-frame-body">
-            <button class="btn btn-primary" id="load-board" type="button">Open the board</button>
+          <div class="app-frame-body">
+            <iframe src="app/?demo" title="Pendu board" loading="lazy"></iframe>
           </div>
         </div>
         <p class="section-foot">Prefer the browser? <a href="app/">Open the web version in its own tab</a>. It saves notes in your browser.</p>
@@ -246,6 +247,50 @@ python pendu.pyw</code></pre>
       </div>
     </section>
 
+    <!-- maker ------------------------------------------------------------------>
+    <section class="maker" id="maker">
+      <div class="wrap">
+        <div class="maker-card">
+          <img class="maker-photo" src="https://avatars.githubusercontent.com/u/25986394?v=4&amp;s=240" alt="Sudhakar" width="112" height="112" loading="lazy">
+          <div>
+            <p class="maker-label">Made by</p>
+            <h2>Sudhakar</h2>
+            <p class="maker-role">Full-stack eCommerce developer · Coimbatore, India</p>
+            <p>8+ years building online stores. Shopify Partner (themes &amp; apps), Magento 2, PHP and Node. These days I build Shopify apps and AI developer tools. Pendu is one of my open-source projects.</p>
+          </div>
+        </div>
+
+        <h3 class="portfolio-title">See more of my work</h3>
+        <div class="portfolio">
+          <a class="site-note yellow" href="https://onemandeveloper.com" target="_blank" rel="noopener">
+            <strong>One Man Developer</strong>
+            <span>My main portfolio and services</span>
+            <em>onemandeveloper.com ↗</em>
+          </a>
+          <a class="site-note blue" href="https://sudhakar-developer.netlify.app" target="_blank" rel="noopener">
+            <strong>Developer portfolio</strong>
+            <span>Projects and skills</span>
+            <em>sudhakar-developer.netlify.app ↗</em>
+          </a>
+          <a class="site-note green" href="https://sudhakar-freelancer.netlify.app" target="_blank" rel="noopener">
+            <strong>Freelance work</strong>
+            <span>Hire me for your project</span>
+            <em>sudhakar-freelancer.netlify.app ↗</em>
+          </a>
+          <a class="site-note orange" href="https://sudhakar-magento.netlify.app" target="_blank" rel="noopener">
+            <strong>Magento portfolio</strong>
+            <span>Magento 2 stores and extensions</span>
+            <em>sudhakar-magento.netlify.app ↗</em>
+          </a>
+          <a class="site-note purple" href="https://github.com/jaisudhakar" target="_blank" rel="noopener">
+            <strong>GitHub</strong>
+            <span>Open-source projects, including Pendu</span>
+            <em>github.com/jaisudhakar ↗</em>
+          </a>
+        </div>
+      </div>
+    </section>
+
     <!-- closing -------------------------------------------------------------->
     <section class="closing">
       <div class="wrap narrow">
@@ -257,7 +302,7 @@ python pendu.pyw</code></pre>
 
   <footer class="footer">
     <div class="wrap footer-inner">
-      <span><span aria-hidden="true">📌</span> Pendu</span>
+      <span><span aria-hidden="true">📌</span> Pendu <small>by <a href="#maker">Sudhakar</a></small></span>
       <nav aria-label="Footer">
         <a href="app/">Web version</a>
         <a class="repo-link" href="https://github.com/jaisudhakar/pendu-reminder">GitHub</a>
