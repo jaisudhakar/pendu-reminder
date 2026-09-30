@@ -91,6 +91,8 @@ It has the same notes, colours, every-day tasks and carry-over rules, and the sa
 - On a touch screen, long-press a note to open its menu.
 - A browser tab can't open at login. When you come back to the tab on a new day, or after a while away, the notes settle onto the board again.
 
+`index.html?demo` is the board embedded on the website. It keeps its notes apart from the real board, starts with a few sample notes, and doesn't take the keyboard focus.
+
 ## Website
 
 `site/` is the product page: what Pendu does, the web board to try, download buttons and questions. The download buttons point to `releases/latest/download/<file>`, so they always get the newest release, and the button at the top picks the visitor's operating system.

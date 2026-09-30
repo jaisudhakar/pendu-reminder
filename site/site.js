@@ -88,16 +88,4 @@
       }
     })();
   }
-
-  // -- live board -------------------------------------------------------------
-
-  // Loaded on request, so visiting the page doesn't touch browser storage.
-  document.getElementById("load-board").addEventListener("click", () => {
-    const frame = document.createElement("iframe");
-    frame.src = "app/";
-    frame.title = "Pendu board";
-    const body = document.getElementById("app-frame-body");
-    body.replaceChildren(frame);
-    frame.focus();
-  });
 })();
